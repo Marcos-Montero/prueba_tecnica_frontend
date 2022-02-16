@@ -4,7 +4,8 @@ import styled from 'styled-components';
 import { color, device } from '../../theme';
 import { useModalContext } from '../../context';
 import { Close, Star } from '@material-ui/icons';
-import { changeRating } from '../../api';
+import { Rating } from '@mui/material';
+import { searchId } from '../../api';
 
 const ModalStyled = styled(motion.div)`
     position: absolute;
@@ -42,14 +43,6 @@ const ContainerStarsdiv = styled.div`
     justify-content: space-around;
     align-items: center;
 `;
-const ButtonSend = styled(motion.button)`
-    background: ${color.watermelon};
-    color: ${color.light};
-    border: none;
-    border-radius: 12px;
-    margin-top: 2em;
-    padding: 10px;
-`;
 const LogoStyled = styled.img`
     width: 100px;
     @media ${device.tablet} {
@@ -79,47 +72,42 @@ const CloseStyled = styled(Close)`
     font-size: 2em;
     padding: 5px;
 `;
+const FaceContainer = styled.div`
+    height: 300px;
+    font-size: 6em;
+    margin-top: 1em;
+`;
 export const Modal: React.FC = () => {
     const [show, toggleShow] = useState(false);
-    const { modalState, closeModal, supplierClicked } = useModalContext();
+    const { modalState, closeModal, idClicked } = useModalContext();
     const [supplier, setSupplier] = useState<any>({});
-    const [rating, setRating] = useState(0);
-    const [showSend, setShowSend] = useState(false);
+    const [rating, setRating] = useState(2);
+    const [hover, setHover] = useState(-1);
 
-    const cargarModal = async () => {
-        const res = await supplierClicked;
-        setSupplier(res);
-    };
     const abrirModal = () => {
         modalState ? toggleShow(true) : toggleShow(false);
     };
+    const loadModal = async () => {
+        const res = await searchId(idClicked);
+        setSupplier(res);
+    };
 
     useEffect(() => {
-        abrirModal();
-        cargarModal();
-        setRating(supplier.rating);
-    }, [modalState]);
-
-    const rateUp = (): any => {
-        setShowSend(true);
-        rating < 5 && setRating(rating + 1);
-    };
-    const rateDown = (): any => {
-        setShowSend(true);
-        rating > 0 && setRating(rating - 1);
-    };
-    const handleSend = (rate: number) => {
-        changeRating({
-            id: supplier?.id,
-            nombre: supplier?.nombre,
-            cif: supplier?.cif,
-            logo: supplier?.logo,
-            rating: rating,
-            dateCreated: supplier?.dateCreated,
+        loadModal().then(() => {
+            setRating(supplier.rating);
+            abrirModal();
         });
-        alert(`Rating sent ${rate}`);
-        closeModal();
-        // window.location.reload();
+    }, [modalState]);
+    useEffect(() => {
+        setSupplier({ ...supplier, rating: rating });
+    }, [rating]);
+    const labels: any = {
+        0: '😭',
+        1: '😪',
+        2: '🤨',
+        3: '🙂',
+        4: '😄',
+        5: '🥰',
     };
     return show ? (
         <>
@@ -140,19 +128,24 @@ export const Modal: React.FC = () => {
                     <h2>Date Created : {supplier?.dateCreated}</h2>
                     <h4>CIF : {supplier?.cif}</h4>
                     <ContainerStarsdiv>
-                        <button onClick={rateDown}>-</button>
-                        {Array.from({ length: rating }).map((v, i) => (
-                            <Star key={i} />
-                        ))}
-                        <button onClick={rateUp}>+</button>
+                        <Rating
+                            size={'large'}
+                            name="hover-feedback"
+                            value={rating}
+                            precision={1}
+                            onChange={(event, newValue: any) => {
+                                setRating(newValue);
+                            }}
+                            onChangeActive={(event, newHover) => {
+                                setHover(newHover);
+                            }}
+                            emptyIcon={<Star style={{ fontSize: '1em' }} />}
+                        />
                     </ContainerStarsdiv>
-                    {showSend && (
-                        <ButtonSend
-                            whileHover={{ scale: 1.2, cursor: 'pointer' }}
-                            onClick={() => handleSend(rating)}
-                        >
-                            Send Rating!
-                        </ButtonSend>
+                    {rating !== null && (
+                        <FaceContainer>
+                            {labels[hover !== -1 ? hover : rating]}
+                        </FaceContainer>
                     )}
                 </MainContainer>
             </ModalStyled>

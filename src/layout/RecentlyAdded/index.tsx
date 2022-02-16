@@ -21,6 +21,8 @@ const TitleRecently = styled.h2`
 `;
 const ContainerSlider = styled.div`
     overflow: hidden;
+    box-shadow: 0 2px 10px lightgray inset, 0 0 10px lightgray;
+    border-radius: 30px;
 `;
 export const RecentlyAdded = () => {
     type IList = {

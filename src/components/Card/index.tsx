@@ -22,7 +22,7 @@ const CardStyled = styled(motion.div)<ICardStyled>`
     background: url(${(props) => props.img}), ${color.light};
     background-size: contain;
     background-repeat: no-repeat;
-    box-shadow: 1px 1px 1px lightgray;
+    box-shadow: 0px 10px 5px lightgray;
     border-radius: 12px;
     display: flex;
     flex-direction: column;

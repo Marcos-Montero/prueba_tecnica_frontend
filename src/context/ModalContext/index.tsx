@@ -6,20 +6,19 @@ type ModalContextType = {
     openModal: () => void;
     closeModal: () => void;
     pickId: (arg0: number) => void;
-    supplierClicked: any;
+    idClicked: number;
 };
 export const ModalContext = React.createContext<ModalContextType>({
     modalState: false,
     openModal: () => null,
     closeModal: () => null,
     pickId: () => null,
-    supplierClicked: {},
+    idClicked: 1,
 });
 
 export const ModalContextProvider: React.FC = ({ children }) => {
     const [modalState, setModalState] = useState(false);
     const [idClicked, setIdClicked] = useState(1);
-    const [supplierClicked, setSupplierClicked] = useState({});
 
     const openModal = () => {
         setModalState(true);
@@ -30,22 +29,12 @@ export const ModalContextProvider: React.FC = ({ children }) => {
     const pickId = (x: number): void => {
         setIdClicked(x);
     };
-
-    const loadSupplierInfo = async (id: number): Promise<any> => {
-        return await searchId(id);
-    };
-    useEffect(() => {
-        loadSupplierInfo(idClicked).then((res) => {
-            setSupplierClicked(res);
-        });
-    }, [idClicked]);
-
     const providerValues = {
         modalState,
         openModal,
         closeModal,
         pickId,
-        supplierClicked,
+        idClicked,
     };
     return (
         <ModalContext.Provider value={providerValues}>
