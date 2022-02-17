@@ -55,7 +55,7 @@ La colección postman consta de dos peticiones get que sirven el listado de prov
 Levantar backend:
 - Una vez configurada la base de datos, levantar backend. En la raíz de la carpeta back:
   ```sh
-  npm i
+  mvnw.cmd spring-boot:run
   ```
 - Comprobar que las peticiones postman funcionen correctamente. Si no, algo falla en la configuración de la base de datos. Contactadme.
 - En la raíz de la carpeta front
