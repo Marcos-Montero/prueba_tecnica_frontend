@@ -94,8 +94,10 @@ En este proyecto he hecho especial esfuerzo en la materialización de los Suppli
 
 - El usuario los ha de agarrar para hacer scroll entre ellos. Además el movimiento de **scroll con físicas naturalizadas** gracias a la librería<img src="https://img.shields.io/badge/-FramerMotion-purple?style=flat&logo=framer&logoColor=white">
 - **Diseño de cartas** para cada supplier. La materialización de los Suppliers, como ya es sabido, pasa por ponerles un box-shadow y un border
-- **Reactivo al hover y al click**
+- Todo lo materializado es **reactivo al hover y al click**; **Doble click** para abrir el modal de detalle
 - Footer Informal y dinámico: El footer rompe con la estética de la app, quedando como el sello de que se trata de una app demo y revelando al desplegarse un link a github
+
+<img src="./doc/imgs/Modal.png" style="width: 50%" />
 
 #### Componentes Reutilizables
 
